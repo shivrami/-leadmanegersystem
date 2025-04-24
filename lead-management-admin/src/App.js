@@ -1,31 +1,37 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 
-
-
-
+// Admin Pages
 import AdminLeadSource from './pages/Admin/adminLeadsource/AdminLeadSource';
 import AdminLeadStatus from './pages/Admin/leadstatus/AdminLeadStatus';
 import AdminCourses from './pages/Admin/AdminCourses/AdminCourses';
 import AdminUserManagement from './pages/Admin/AdminUserManagement/AdminUserManagement';
 
-import PrivateRoute from './components/PrivateRoute';
-import AdminLogin from './pages/Admin/Login/AdminLogin';
-import Counselorlogin from './pages/counselor/counselorlogin/Counselorlogin.js';
-
-import AdminDashboardPage from './pages/Admin/dashborad/AdminDashboradPage';
+// Counselor Pages
+import Counselorlogin from './pages/counselor/counselorlogin/Counselorlogin';
 import CounselorDashboardPage from './pages/counselor/dashborad/CounselorDashboradPage';
-import ChangePassword from './pages/counselor/ChangePassword/ChangePassword.js';
-import AllLead from './pages/counselor/lead/AllLead.js';
-import LeadDetails from './pages/counselor/lead/LeadDetails.js';
-import OpenLead from './pages/counselor/lead/OpenLead.js';
-import ConvertedLead from './pages/counselor/lead/ConvertedLead.js';
-import ClosedLead from './pages/counselor/lead/ClosedLead.js';
-import TodayFollowUps from './pages/followup/TodayFollowUps.js';
-import OverdueFollowUps from './pages/followup/OverdueFollowIps.js';
-import FutureFollowUps from './pages/followup/FutureFollowUps.js';
+import ChangePassword from './pages/counselor/ChangePassword/ChangePassword';
+import AllLead from './pages/counselor/lead/AllLead';
+import OpenLead from './pages/counselor/lead/OpenLead';
+import ConvertedLead from './pages/counselor/lead/ConvertedLead';
+import ClosedLead from './pages/counselor/lead/ClosedLead';
+import LeadDetails from './pages/counselor/lead/LeadDetails';
 
+// Follow-ups
+import TodayFollowUps from './pages/followup/TodayFollowUps';
+import OverdueFollowUps from './pages/followup/OverdueFollowIps';
+import FutureFollowUps from './pages/followup/FutureFollowUps';
 
+// Auth
+import AdminLogin from './pages/Admin/Login/AdminLogin';
+
+// Components
+import PrivateRoute from './components/PrivateRoute';
+
+import { Navigate } from 'react-router-dom';
+import AdminDashboardPage from './pages/Admin/dashborad/AdminDashboardPage ';
+// Optional: Not Found Page
+// import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -33,13 +39,15 @@ function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/adminlogin" element={<AdminLogin />} />
-        <Route path="/" element={<Counselorlogin />} />
+        <Route path="/" element={<Navigate to="/counselor" replace />} />
+        <Route path="/counselor" element={<Counselorlogin />} />
+
 
         {/* Admin Protected Routes */}
         <Route
           path="/admin/dashboard"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="admin">
               <AdminDashboardPage />
             </PrivateRoute>
           }
@@ -47,7 +55,7 @@ function App() {
         <Route
           path="/admin/leadstatus"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="admin">
               <AdminLeadStatus />
             </PrivateRoute>
           }
@@ -55,7 +63,7 @@ function App() {
         <Route
           path="/admin/leadsource"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="admin">
               <AdminLeadSource />
             </PrivateRoute>
           }
@@ -63,7 +71,7 @@ function App() {
         <Route
           path="/admin/course"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="admin">
               <AdminCourses />
             </PrivateRoute>
           }
@@ -71,17 +79,17 @@ function App() {
         <Route
           path="/admin/adminUserManagement"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="admin">
               <AdminUserManagement />
             </PrivateRoute>
           }
         />
 
-        {/* Counselor Protected Route */}
+        {/* Counselor Protected Routes */}
         <Route
           path="/counselor/dashboard"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="counselor">
               <CounselorDashboardPage />
             </PrivateRoute>
           }
@@ -89,7 +97,7 @@ function App() {
         <Route
           path="/counselor/changepassword"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="counselor">
               <ChangePassword />
             </PrivateRoute>
           }
@@ -97,7 +105,7 @@ function App() {
         <Route
           path="/counselor/allleads"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="counselor">
               <AllLead />
             </PrivateRoute>
           }
@@ -105,44 +113,39 @@ function App() {
         <Route
           path="/counselor/openleads"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="counselor">
               <OpenLead />
             </PrivateRoute>
           }
         />
-
         <Route
           path="/counselor/convertedleads"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="counselor">
               <ConvertedLead />
             </PrivateRoute>
           }
         />
-
         <Route
           path="/counselor/closedleads"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="counselor">
               <ClosedLead />
             </PrivateRoute>
           }
         />
-
-
         <Route
           path="/counselor/todayfollowups"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="counselor">
               <TodayFollowUps />
             </PrivateRoute>
           }
         />
-
         <Route
           path="/counselor/overduefollowups"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="counselor">
               <OverdueFollowUps />
             </PrivateRoute>
           }
@@ -150,16 +153,26 @@ function App() {
         <Route
           path="/counselor/futurefollowups"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="counselor">
               <FutureFollowUps />
             </PrivateRoute>
           }
         />
 
-        <Route path="/lead-details/:leadId" element={<LeadDetails />} />
+        {/* Lead Details - visible to both roles if needed */}
+        <Route
+          path="/lead-details/:leadId"
+          element={
+            <PrivateRoute>
+              <LeadDetails />
+            </PrivateRoute>
+          }
+        />
 
+        {/* Optional 404 Page */}
+        {/* <Route path="*" element={<NotFound />} /> */}
+        <Route path="*" element={<h1>404 - Page Not Found</h1>} />
       </Routes>
-
     </BrowserRouter>
   );
 }

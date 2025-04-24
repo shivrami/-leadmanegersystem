@@ -7,7 +7,7 @@ import Sidebar from '../Sidebar/Sidebar';
 
 const AdminDashboradPage = () => {
   return (
-    <>
+   
        <div className="wrapper">
         {/* Sidebar */}
         <Sidebar/>
@@ -637,11 +637,11 @@ const AdminDashboradPage = () => {
         </div>
 
       </div>
-    </>
+ 
   )
 }
 
-export default AdminDashboradPage
+export default AdminDashboradPage;
 
 
 
