@@ -19,31 +19,36 @@ const Counselorlogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     clearMessages();
-
+  
     if (!credentials.counselorUsername || !credentials.password) {
       setError("Username and password are required.");
       return;
     }
-
+  
     try {
       const res = await fetch("http://localhost:8080/api/counselors/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
       });
-
+  
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.message || "Invalid credentials");
       }
-
-      const data = await res.json();
+  
+      const data = await res.json(); // ✅ get response body
       setSuccess("Login successful!");
-
-      // ✅ Store login info for PrivateRoute
+  
+      // ✅ Store login info
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("role", "counselor");
+      localStorage.setItem("counselorUsername", data.counselorUsername);
+      localStorage.setItem("counselorId", data.id);
+      console.log("Response data:", data);
 
+
+  
       setTimeout(() => {
         navigate("/counselor/dashboard");
       }, 1000);
@@ -51,6 +56,7 @@ const Counselorlogin = () => {
       setError(err.message);
     }
   };
+  
 
   return (
     <div className="container mt-5">

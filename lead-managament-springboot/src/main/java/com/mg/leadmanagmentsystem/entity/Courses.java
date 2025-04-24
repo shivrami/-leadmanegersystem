@@ -1,6 +1,9 @@
 package com.mg.leadmanagmentsystem.entity;
 
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -22,6 +25,10 @@ public class Courses {
 
     @Column(name = "fee", nullable = false)
     private int fee;
+    
+    @ManyToMany(mappedBy = "courses")
+    private Set<Lead> leads = new HashSet<>();
+
 
     
     public Courses() {}

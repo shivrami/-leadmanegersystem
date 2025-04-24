@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../Sidebar/Sidebar";
+
 import Sidebar2 from "../../../include/Sidebar2";
 import Footer from "../../../include/Footer";
 import Navbar from "../../../include/Navbar";
+import Sidebar from "../../Admin/Sidebar/Sidebar";
 
 const AdminUserManagement = () => {
   const [admins, setAdmins] = useState([]);
@@ -129,7 +130,7 @@ const AdminUserManagement = () => {
   return (
     <>
       <div className="wrapper">
-        <Sidebar />
+        <Sidebar/>
         <div className="main-panel">
           <Navbar />
           <div className="container">

@@ -7,7 +7,7 @@ const PrivateRoute = ({ children, role }) => {
   const location = useLocation();
 
   if (!isLoggedIn) {
-    return <Navigate to={userRole === 'counselor' ? '/counselorlogin' : '/adminlogin'} state={{ from: location }} replace />;
+    return <Navigate to={userRole === 'counselor' ? '/adminlogin' : '/'} state={{ from: location }} replace />;
   }
 
   if (role && userRole !== role) {

@@ -8,4 +8,6 @@ import com.mg.leadmanagmentsystem.entity.Counselor;
 
 public interface CounselorRepository extends JpaRepository<Counselor, Integer> {
     Optional<Counselor> findByCounselorUsername(String counselorUsername);
+
+	Optional<Counselor> findById(int counselorId);
 }

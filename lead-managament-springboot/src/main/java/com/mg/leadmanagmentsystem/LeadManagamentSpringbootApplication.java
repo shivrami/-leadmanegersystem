@@ -7,8 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class LeadManagamentSpringbootApplication {
 
 	public static void main(String[] args) {
+		System.out.println("Start program...");
 		SpringApplication.run(LeadManagamentSpringbootApplication.class, args);
-		System.out.println("end program..");
+		System.out.println("end program...");
 	}
 
 }

@@ -9,6 +9,10 @@ const Sidebar = () => {
     navigate('/counselorlogin');
   };
 
+  // Fetch counselor username
+  const storedUsername =
+    localStorage.getItem('counselorUsername') || sessionStorage.getItem('counselorUsername');
+
   return (
     <>
       <div className="sidebar" data-background-color="dark">
@@ -27,24 +31,31 @@ const Sidebar = () => {
 
         <div className="sidebar-wrapper scrollbar scrollbar-inner">
           <div className="sidebar-content">
-            <ul className="nav nav-secondary">
 
+            {/* Counselor Username */}
+            {storedUsername && (
+              <div className="text-center text-white mb-3 mt-2">
+              <h5><strong>Welcome,</strong> </h5><br />
+                <span>{storedUsername}</span>
+              </div>
+            )}
+
+            <ul className="nav nav-secondary">
               {/* Dashboard */}
               <li className="nav-item active">
                 <a href="/counselor/dashboard">
                   <i className="fas fa-home" />
-                  <p>Dashboard Overview</p>
+                  <p>Dashboard </p>
                 </a>
               </li>
+
               {/* All Leads */}
               <li className="nav-item">
-                      <a   href="/counselor/allleads">
-                       
-                          <i className="fas fa-list me-2" />
-                          <p>All Leads</p>
-                       
-                      </a>
-                    </li>
+                <a href="/counselor/allleads">
+                  <i className="fas fa-list me-2" />
+                  <p>All Leads</p>
+                </a>
+              </li>
 
               {/* Leads Section */}
               <li className="nav-item">
@@ -55,10 +66,6 @@ const Sidebar = () => {
                 </a>
                 <div className="collapse" id="leadsSection">
                   <ul className="nav nav-collapse">
-
-                    
-
-                    {/* Open Leads */}
                     <li>
                       <a href="/counselor/openleads">
                         <span className="sub-item">
@@ -67,18 +74,6 @@ const Sidebar = () => {
                         </span>
                       </a>
                     </li>
-
-                    {/* Closed Leads */}
-                    <li>
-                      <a href="/counselor/closedleads">
-                        <span className="sub-item">
-                          <i className="fas fa-times-circle me-2" />
-                          Closed Leads
-                        </span>
-                      </a>
-                    </li>
-
-                    {/* Converted Leads */}
                     <li>
                       <a href="/counselor/convertedleads">
                         <span className="sub-item">
@@ -87,12 +82,18 @@ const Sidebar = () => {
                         </span>
                       </a>
                     </li>
-
+                    <li>
+                      <a href="/counselor/closedleads">
+                        <span className="sub-item">
+                          <i className="fas fa-times-circle me-2" />
+                          Closed Leads
+                        </span>
+                      </a>
+                    </li>
+                    
                   </ul>
                 </div>
               </li>
-
-
 
               {/* Follow-ups */}
               <li className="nav-item">
@@ -111,14 +112,7 @@ const Sidebar = () => {
                         </span>
                       </a>
                     </li>
-                    <li>
-                      <a href="/counselor/futurefollowups">
-                        <span className="sub-item">
-                          <i className="fas fa-calendar-plus me-2" />
-                          Future Follow-ups
-                        </span>
-                      </a>
-                    </li>
+                  
                     <li>
                       <a href="/counselor/overduefollowups">
                         <span className="sub-item">
@@ -127,24 +121,23 @@ const Sidebar = () => {
                         </span>
                       </a>
                     </li>
+                    <li>
+                      <a href="/counselor/futurefollowups">
+                        <span className="sub-item">
+                          <i className="fas fa-calendar-plus me-2" />
+                          Future Follow-ups
+                        </span>
+                      </a>
+                    </li>
                   </ul>
                 </div>
               </li>
-
 
               {/* Change Password */}
               <li className="nav-item">
                 <a href="/counselor/changepassword">
                   <i className="fas fa-key" />
                   <p>Change Password</p>
-                </a>
-              </li>
-
-              {/* Profile */}
-              <li className="nav-item">
-                <a href="/counselor/profile">
-                  <i className="fas fa-user-circle" />
-                  <p>Profile</p>
                 </a>
               </li>
 
