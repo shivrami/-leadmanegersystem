@@ -145,7 +145,7 @@ const Sidebar = () => {
             <div className="collapse" id="maps">
               <ul className="nav nav-collapse">
                 <li>
-                  <a href="maps/googlemaps.html">
+                  <a href="/admin/counselorUserManagement">
                     <span className="sub-item">Manage</span>
                   </a>
                 </li>
@@ -167,7 +167,7 @@ const Sidebar = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="charts/sparkline.html">
+                  <a href="/admin/counselorUserManagement">
                     <span className="sub-item">Counselor</span>
                   </a>
                 </li>

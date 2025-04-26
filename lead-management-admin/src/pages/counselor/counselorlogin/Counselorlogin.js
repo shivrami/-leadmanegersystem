@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import the icons
 
 const Counselorlogin = () => {
   const [credentials, setCredentials] = useState({ counselorUsername: "", password: "" });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -77,7 +79,7 @@ const Counselorlogin = () => {
         <div className="form-group mb-3">
           <label>Password</label>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             name="password"
             value={credentials.password}
             onChange={handleChange}
@@ -85,6 +87,13 @@ const Counselorlogin = () => {
             placeholder="Enter password"
           />
         </div>
+        <div
+                    className="position-absolute"
+                    style={{ top: "38%", right: "30%", transform: "translateY(-50%)", cursor: "pointer" }}
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <FaEye /> : <FaEyeSlash />} {/* Toggle eye icon */}
+                  </div>
 
         {error && <div className="alert alert-danger mt-2">{error}</div>}
         {success && <div className="alert alert-success mt-2">{success}</div>}

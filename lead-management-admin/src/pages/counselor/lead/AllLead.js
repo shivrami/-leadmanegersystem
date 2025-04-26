@@ -12,6 +12,8 @@ import $ from 'jquery';
 
 const AllLead = () => {
   const counselorId = localStorage.getItem('counselorId'); // Get counselorId from localStorage
+  const storedUsername =
+    localStorage.getItem('counselorUsername') || sessionStorage.getItem('counselorUsername');
 
   const [leads, setLeads] = useState([]);
   const [leadSources, setLeadSources] = useState([]);
@@ -85,6 +87,7 @@ const AllLead = () => {
       gender: lead.gender || '',
       referral: lead.referral || '',
       counselorId: counselorId || '',
+      leadSourceName:lead.leadSourceName || ''
     });
   };
 
@@ -154,8 +157,10 @@ const AllLead = () => {
     try {
       const response = await fetch("http://localhost:8080/api/leads");
       if (!response.ok) throw new Error("Failed to fetch leads");
-      const data = await response.json();
+       const data = await response.json();
+setLeads(data.filter(lead => lead.courseNames === storedUsername));
       setLeads(data);
+      
     } catch (error) {
       console.error('Error fetching leads:', error);
     }

@@ -5,7 +5,7 @@ import Footer from "../../../include/Footer";
 import Navbar from "../../../include/Navbar";
 import Sidebar from '../Sidebar/Sidebar';
 
-const AdminDashboradPage = () => {
+const AdminDashboardPage  = () => {
   return (
    
        <div className="wrapper">
@@ -641,7 +641,7 @@ const AdminDashboradPage = () => {
   )
 }
 
-export default AdminDashboradPage;
+export default AdminDashboardPage ;
 
 
 

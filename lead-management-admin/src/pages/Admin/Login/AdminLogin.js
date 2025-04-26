@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import the icons
 
 const AdminLogin = () => {
   const [credentials, setCredentials] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -67,16 +69,23 @@ const AdminLogin = () => {
             placeholder="Enter admin username"
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 position-relative">
           <label>Password</label>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"} // Toggle password visibility
             name="password"
             value={credentials.password}
             onChange={handleChange}
             className="form-control"
             placeholder="Enter password"
           />
+          <div
+            className="position-absolute"
+            style={{ top: "60%", right: "30px", transform: "translateY(-50%)", cursor: "pointer" }}
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <FaEye /> : <FaEyeSlash />} {/* Toggle eye icon */}
+          </div>
         </div>
 
         {error && <div className="alert alert-danger mt-2">{error}</div>}

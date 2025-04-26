@@ -30,6 +30,7 @@ import PrivateRoute from './components/PrivateRoute';
 
 import { Navigate } from 'react-router-dom';
 import AdminDashboardPage from './pages/Admin/dashborad/AdminDashboardPage ';
+import CounselorUserManagement from './pages/Admin/CounselorUserManagement/CounselorUserManagement';
 // Optional: Not Found Page
 // import NotFound from './pages/NotFound';
 
@@ -43,7 +44,7 @@ function App() {
         <Route path="/counselor" element={<Counselorlogin />} />
 
 
-        {/* Admin Protected Routes */}
+       
         <Route
           path="/admin/dashboard"
           element={
@@ -81,6 +82,14 @@ function App() {
           element={
             <PrivateRoute role="admin">
               <AdminUserManagement />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/counselorUserManagement"
+          element={
+            <PrivateRoute role="admin">
+              <CounselorUserManagement />
             </PrivateRoute>
           }
         />

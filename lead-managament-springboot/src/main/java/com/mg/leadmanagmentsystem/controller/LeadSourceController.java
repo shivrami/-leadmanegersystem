@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/lead-source")
-@CrossOrigin(origins = "http://localhost:3000") // Allow frontend React requests
+@CrossOrigin(origins = "http://localhost:3000") 
 public class LeadSourceController {
 
     @Autowired
