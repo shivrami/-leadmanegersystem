@@ -1,4 +1,15 @@
 import React from 'react'
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import Sidebar from '../../counselor/Sidebar/Sidebar';
+import Navbar from '../../../include/Navbar';
+import Sidebar2 from '../../../include/Sidebar2';
+import Footer from '../../../include/Footer';
+import { FaUser, FaShareAlt, FaCheckCircle, FaBook, FaPhone, FaCalendar, FaEye, FaEdit } from 'react-icons/fa';
+import 'datatables.net-dt/css/jquery.dataTables.css';
+import 'datatables.net';
+import $ from 'jquery';
+
 
 const Report = () => {
     const counselorId = localStorage.getItem('counselorId'); // Get counselorId from localStorage
@@ -148,7 +159,7 @@ const Report = () => {
           const response = await fetch("http://localhost:8080/api/leads");
           if (!response.ok) throw new Error("Failed to fetch leads");
            const data = await response.json();
-    setLeads(data.filter(lead => lead.counselorUserName === storedUsername));
+    
           setLeads(data);
           
         } catch (error) {

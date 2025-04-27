@@ -1,6 +1,5 @@
 package com.mg.leadmanagmentsystem.service;
 
-
 import com.mg.dto.LeadRequestDTO;
 import com.mg.dto.LeadResponseDTO;
 import com.mg.leadmanagmentsystem.entity.*;
@@ -11,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-
 import java.util.stream.Collectors;
 
 @Service
@@ -47,24 +45,17 @@ public class LeadServiceImpl implements LeadService {
         Lead existing = leadRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Lead not found with id: " + id));
 
+        // Update the fields
         existing.setLeadName(dto.getLeadName());
         existing.setLeadDate(dto.getLeadDate());
         existing.setLocation(dto.getLocation());
         existing.setLeadNotes(dto.getLeadNotes());
         existing.setEstimatedValue(dto.getEstimatedValue());
         existing.setUpdatedDate(LocalDate.now());
-        existing.setFollow_up_date(dto.getFollow_up_date());
+        existing.setFollowUpDate(dto.getFollow_up_date());
 
-        existing.setCounselor(counselorRepository.findById(dto.getCounselorId())
-                .orElseThrow(() -> new RuntimeException("Counselor not found")));
-
-        existing.setLeadSource(leadSourceRepository.findById(dto.getLeadSourceId())
-                .orElseThrow(() -> new RuntimeException("Lead Source not found")));
-
-        existing.setLeadStatus(leadStatusRepository.findById(dto.getLeadStatusId())
-                .orElseThrow(() -> new RuntimeException("Lead Status not found")));
-
-        existing.setCourses(courseRepository.findAllById(dto.getCourseIds()));
+        // Update associated entities
+        updateLeadAssociations(existing, dto);
 
         Lead updatedLead = leadRepository.save(existing);
         return convertToDto(updatedLead);
@@ -99,31 +90,43 @@ public class LeadServiceImpl implements LeadService {
         lead.setLocation(dto.getLocation());
         lead.setLeadNotes(dto.getLeadNotes());
         lead.setEstimatedValue(dto.getEstimatedValue());
-        lead.setFollow_up_date(dto.getFollow_up_date());
+        lead.setFollowUpDate(dto.getFollow_up_date());
 
-        Counselor counselor = counselorRepository.findById(dto.getCounselorId())
-                .orElseThrow(() -> new RuntimeException("Counselor not found"));
+        // Set associated entities
+        lead.setCounselor(fetchCounselor(dto.getCounselorId()));
+        lead.setLeadSource(fetchLeadSource(dto.getLeadSourceId()));
+        lead.setLeadStatus(fetchLeadStatus(dto.getLeadStatusId()));
+        lead.setCourses(courseRepository.findAllById(dto.getCourseIds()));
 
-        LeadSource leadSource = leadSourceRepository.findById(dto.getLeadSourceId())
-                .orElseThrow(() -> new RuntimeException("Lead Source not found"));
-
-        LeadStatus leadStatus = leadStatusRepository.findById(dto.getLeadStatusId())
-                .orElseThrow(() -> new RuntimeException("Lead Status not found"));
-
-        List<Courses> courses = courseRepository.findAllById(dto.getCourseIds());
-
-        lead.setCounselor(counselor);
-        lead.setLeadSource(leadSource);
-        lead.setLeadStatus(leadStatus);
-        lead.setCourses(courses);
         lead.setContactNo(dto.getContactNo());
         lead.setEmail(dto.getEmail());
         lead.setPriority(dto.getPriority());
         lead.setGender(dto.getGender());
         lead.setReferral(dto.getReferral());
 
-
         return lead;
+    }
+
+    private void updateLeadAssociations(Lead lead, LeadRequestDTO dto) {
+        lead.setCounselor(fetchCounselor(dto.getCounselorId()));
+        lead.setLeadSource(fetchLeadSource(dto.getLeadSourceId()));
+        lead.setLeadStatus(fetchLeadStatus(dto.getLeadStatusId()));
+        lead.setCourses(courseRepository.findAllById(dto.getCourseIds()));
+    }
+
+    private LeadSource fetchLeadSource(Long leadSourceId) {
+        return leadSourceRepository.findById(leadSourceId)
+                .orElseThrow(() -> new RuntimeException("Lead Source not found"));
+    }
+
+    private LeadStatus fetchLeadStatus(Long leadStatusId) {
+        return leadStatusRepository.findById(leadStatusId)
+                .orElseThrow(() -> new RuntimeException("Lead Status not found"));
+    }
+
+    private Counselor fetchCounselor(int counselorId) {
+        return counselorRepository.findById(counselorId)
+                .orElseThrow(() -> new RuntimeException("Counselor not found"));
     }
 
     private LeadResponseDTO convertToDto(Lead lead) {
@@ -136,18 +139,23 @@ public class LeadServiceImpl implements LeadService {
         dto.setEstimatedValue(lead.getEstimatedValue());
         dto.setCreatedDate(lead.getCreatedDate());
         dto.setUpdatedDate(lead.getUpdatedDate());
-        dto.setFollow_up_date(lead.getFollow_up_date());
+        dto.setFollow_up_date(lead.getFollowUpDate());
 
+        // Map associated entities
         if (lead.getCounselor() != null) {
             dto.setCounselorUserName(lead.getCounselor().getCounselorUsername());
+            dto.setCounselorId(lead.getCounselor().getId());
+            
         }
 
         if (lead.getLeadSource() != null) {
             dto.setLeadSourceName(lead.getLeadSource().getSourceName());
+            dto.setLeadSourceId(lead.getLeadSource().getId());
         }
 
         if (lead.getLeadStatus() != null) {
             dto.setLeadStatusName(lead.getLeadStatus().getStatusName());
+            dto.setLeadStatusId(lead.getLeadStatus().getId());
         }
 
         if (lead.getCourses() != null) {
@@ -156,50 +164,44 @@ public class LeadServiceImpl implements LeadService {
                     .map(Courses::getCourseName)
                     .collect(Collectors.toList())
             );
+            dto.setCourseIds(
+                    lead.getCourses().stream()
+                        .map(Courses::getId)  // Assuming Courses has a method getId() to get course ID
+                        .collect(Collectors.toList())
+                );
         }
+
         dto.setContactNo(lead.getContactNo());
         dto.setEmail(lead.getEmail());
         dto.setPriority(lead.getPriority());
         dto.setGender(lead.getGender());
         dto.setReferral(lead.getReferral());
 
-
         return dto;
     }
-    
+
     @Override
     public LeadResponseDTO updateFollowupLead(Long id, LeadRequestDTO dto) {
         Lead existing = leadRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Lead not found with id: " + id));
 
-        
-        
-        existing.setFollow_up_date(dto.getFollow_up_date());
+        existing.setFollowUpDate(dto.getFollow_up_date());
         existing.setUpdatedDate(LocalDate.now());
-       
+
         Lead updatedLead = leadRepository.save(existing);
         return convertToDto(updatedLead);
     }
-    
+
     @Override
     public LeadResponseDTO NextupdateFollowupLead(Long id, LeadRequestDTO dto) {
         Lead existing = leadRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Lead not found with id: " + id));
 
-        existing.setLeadStatus(
-                leadStatusRepository.findById(dto.getLeadStatusId())
-                    .orElseThrow(() -> new RuntimeException("Lead Status not found with id: " + dto.getLeadStatusId()))
-            );
-        
-        
-        existing.setFollow_up_date(dto.getFollow_up_date());
+        existing.setLeadStatus(fetchLeadStatus(dto.getLeadStatusId()));
+        existing.setFollowUpDate(dto.getFollow_up_date());
         existing.setUpdatedDate(LocalDate.now());
-       
+
         Lead updatedLead = leadRepository.save(existing);
         return convertToDto(updatedLead);
     }
-    
-   
-
-
 }

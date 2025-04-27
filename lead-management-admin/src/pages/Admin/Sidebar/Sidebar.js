@@ -78,7 +78,7 @@ const Sidebar = () => {
             <div className="collapse" id="base">
               <ul className="nav nav-collapse">
                 <li>
-                  <a href="components/avatars.html">
+                  <a href="/admin/report">
                     <span className="sub-item">Manage</span>
                   </a>
                 </li>
@@ -137,7 +137,7 @@ const Sidebar = () => {
             </div>
           </li>
           <li className="nav-item">
-            <a data-bs-toggle="collapse" href="#maps">
+            <a data-bs-toggle="collapse" href="/admin/counselorUserManagement">
               <i className="fas fa-map-marker-alt" />
               <p> Counselor Management</p>
               <span className="caret" />
@@ -145,7 +145,7 @@ const Sidebar = () => {
             <div className="collapse" id="maps">
               <ul className="nav nav-collapse">
                 <li>
-                  <a href="/admin/counselorUserManagement">
+                  <a href="maps/googlemaps.html">
                     <span className="sub-item">Manage</span>
                   </a>
                 </li>

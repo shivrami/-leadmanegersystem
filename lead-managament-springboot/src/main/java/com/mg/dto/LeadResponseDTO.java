@@ -6,6 +6,11 @@ import java.util.List;
 public class LeadResponseDTO {
     private Long id;
     private String leadName;
+    private int counselorId; // Changed to Long for consistency
+    private Long leadSourceId;
+    private Long leadStatusId;
+    
+    private List<Integer> courseIds;
     private String counselorUserName;
     private String leadSourceName;
     private String leadStatusName;
@@ -24,12 +29,13 @@ public class LeadResponseDTO {
     private String referral;   
     private LocalDate follow_up_date;    
 
+    // Getters and Setters
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -41,6 +47,45 @@ public class LeadResponseDTO {
         this.leadName = leadName;
     }
 
+    public int getCounselorId() {
+        return counselorId;
+    }
+
+    public void setCounselorId(int counselorId) { // Changed to Long for consistency
+        this.counselorId = counselorId;
+    }
+
+    public Long getLeadSourceId() {
+        return leadSourceId;
+    }
+
+    public void setLeadSourceId(Long leadSourceId) {
+        this.leadSourceId = leadSourceId;
+    }
+
+    public Long getLeadStatusId() {
+        return leadStatusId;
+    }
+
+    public void setLeadStatusId(Long leadStatusId) {
+        this.leadStatusId = leadStatusId;
+    }
+
+    public List<Integer> getCourseIds() {
+        return courseIds;
+    }
+
+    public void setCourseIds(List<Integer> courseIds) {
+        this.courseIds = courseIds;
+    }
+
+    public String getCounselorUserName() {
+        return counselorUserName;
+    }
+
+    public void setCounselorUserName(String counselorUserName) {
+        this.counselorUserName = counselorUserName;
+    }
 
     public String getLeadSourceName() {
         return leadSourceName;
@@ -154,19 +199,11 @@ public class LeadResponseDTO {
         this.referral = referral;
     }
 
-	public String getCounselorUserName() {
-		return counselorUserName;
-	}
+    public LocalDate getFollow_up_date() {
+        return follow_up_date;
+    }
 
-	public void setCounselorUserName(String counselorUserName) {
-		this.counselorUserName = counselorUserName;
-	}
-
-	public LocalDate getFollow_up_date() {
-		return follow_up_date;
-	}
-
-	public void setFollow_up_date(LocalDate follow_up_date) {
-		this.follow_up_date = follow_up_date;
-	}
+    public void setFollow_up_date(LocalDate follow_up_date) {
+        this.follow_up_date = follow_up_date;
+    }
 }

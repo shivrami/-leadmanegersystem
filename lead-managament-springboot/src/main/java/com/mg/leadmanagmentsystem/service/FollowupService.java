@@ -67,7 +67,7 @@ public class FollowupService {
             .orElseThrow(() -> new RuntimeException("Lead not found with id: " + leadId));
 
       
-        lead.setFollow_up_date(dto.getFollowUpDate());
+        lead.setFollowUpDate(dto.getFollowUpDate());
 
        
         Lead updatedLead = leadRepository.save(lead);
@@ -76,7 +76,7 @@ public class FollowupService {
         FollowupResponseDTO responseDTO = new FollowupResponseDTO();
         responseDTO.setId(updatedLead.getId());               // here we're reusing the Lead ID
         responseDTO.setLeadId(updatedLead.getId());
-        responseDTO.setFollowUpDate(updatedLead.getFollow_up_date());
+        responseDTO.setFollowUpDate(updatedLead.getFollowUpDate());
       
         return responseDTO;
     }
