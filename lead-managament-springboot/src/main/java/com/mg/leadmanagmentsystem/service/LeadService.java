@@ -20,4 +20,7 @@ public interface LeadService {
     
     LeadResponseDTO updateFollowupLead(Long id, LeadRequestDTO leadRequestDTO);
     LeadResponseDTO NextupdateFollowupLead(Long id, LeadRequestDTO leadRequestDTO);
+    
+    List<LeadResponseDTO> getFilteredLeads(Integer leadStatusId, Integer counselorId, Integer leadSourceId, Integer courseId);
+
 }

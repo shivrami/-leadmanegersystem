@@ -1,7 +1,7 @@
-import React from 'react'
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Sidebar from '../../counselor/Sidebar/Sidebar';
+import Sidebar from '../../Admin/Sidebar/Sidebar';
 import Navbar from '../../../include/Navbar';
 import Sidebar2 from '../../../include/Sidebar2';
 import Footer from '../../../include/Footer';
@@ -20,6 +20,7 @@ const Report = () => {
       const [leadSources, setLeadSources] = useState([]);
       const [leadStatuses, setLeadStatuses] = useState([]);
       const [courses, setCourses] = useState([]);
+      const [counselors, setCounselors] = useState([]);
       const [priorityOptions] = useState([
         { id: 'high', name: 'High' },
         { id: 'medium', name: 'Medium' },
@@ -90,6 +91,117 @@ const Report = () => {
           counselorId: counselorId || '',
           leadSourceName:lead.leadSourceName || ''
         });
+      };
+      const FilterForm = ({ onFilterApply }) => {
+        const [formData, setFormData] = useState({
+          counselor: '',
+          leadsource: '',
+          leadstatus: '',
+          course: '',
+        });
+    
+        const handleChange = (e) => {
+          const { name, value } = e.target;
+          setFormData({ ...formData, [name]: value });
+        };
+    
+        const handleSubmit = async (e) => {
+          e.preventDefault();
+          const filterData = {
+            counselorId: formData.counselor || '',
+            leadSourceId: formData.leadsource || '',
+            leadStatusId: formData.leadstatus || '',
+            courseId: formData.course || '',
+          };
+    
+          // Call API with filters
+          onFilterApply(filterData);
+        };
+    
+        return (
+          <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '5px', alignItems: 'center', flexWrap: 'wrap', marginBottom: '20px' }}>
+            <label htmlFor="counselor">Counselor:</label>
+            <select
+              name="counselor"
+              id="counselor"
+              style={{ width: '130px' }}
+              value={formData.counselor}
+              onChange={handleChange}
+            >
+              <option value="">-- Choose --</option>
+              {counselors.map((source) => (
+                <option key={source.id} value={source.id}>
+                  {source.counselorUsername}
+                </option>
+              ))}
+            </select>
+    
+            <label htmlFor="leadsource">Lead Source:</label>
+            <select
+              name="leadsource"
+              id="leadsource"
+              style={{ width: '130px' }}
+              value={formData.leadsource}
+              onChange={handleChange}
+            >
+              <option value="">-- Choose --</option>
+              {leadSources.map((source) => (
+                <option key={source.id} value={source.id}>
+                  {source.sourceName}
+                </option>
+              ))}
+            </select>
+    
+            <label htmlFor="leadstatus">Lead Status:</label>
+            <select
+              name="leadstatus"
+              id="leadstatus"
+              style={{ width: '130px' }}
+              value={formData.leadstatus}
+              onChange={handleChange}
+            >
+              <option value="">-- Choose --</option>
+              {leadStatuses.map((status) => (
+                <option key={status.id} value={status.id}>
+                  {status.statusName}
+                </option>
+              ))}
+            </select>
+    
+            <label htmlFor="course">Course:</label>
+            <select
+              name="course"
+              id="course"
+              style={{ width: '130px' }}
+              value={formData.course}
+              onChange={handleChange}
+            >
+              <option value="">-- Choose --</option>
+              {courses.map((course) => (
+                <option key={course.id} value={course.id}>
+                  {course.courseName}
+                </option>
+              ))}
+            </select>
+    
+            <button type="submit" style={{ padding: '5px 10px', backgroundColor: 'blue', color: 'white' }}>
+              Filter
+            </button>
+          </form>
+        );
+      };
+    
+      // Ensure fetchLeadsWithFilters is declared before it is called
+      const fetchLeadsWithFilters = async (filterData) => {
+        try {
+          const queryParams = new URLSearchParams(filterData).toString();
+          const response = await fetch(`http://localhost:8080/api/leads?${queryParams}`);
+          if (!response.ok) throw new Error('Failed to fetch filtered leads');
+          const data = await response.json();
+          setLeads(data);
+        } catch (error) {
+          console.error('Error fetching filtered leads:', error);
+        }
       };
     
       const handleDelete = async (id) => {
@@ -169,35 +281,47 @@ const Report = () => {
     
       const fetchDropdownData = async () => {
         try {
-          const [sourcesRes, statusesRes, coursesRes] = await Promise.all([
+          const [sourcesRes, statusesRes, coursesRes,counselorRes] = await Promise.all([
             fetch('http://localhost:8080/api/lead-source').then(res => res.json()),
             fetch('http://localhost:8080/api/lead-status').then(res => res.json()),
-            fetch('http://localhost:8080/api/courses').then(res => res.json())
+            fetch('http://localhost:8080/api/courses').then(res => res.json()),
+            fetch('http://localhost:8080/api/counselors').then(res=>res.json())
           ]);
           setLeadSources(sourcesRes);
           setLeadStatuses(statusesRes);
           setCourses(coursesRes);
+          setCounselors(counselorRes)
         } catch (error) {
           console.error('Error fetching dropdown data:', error);
         }
       };
+      const handleFilterSubmit = async (filterData) => {
+        // Call fetchLeadsWithFilters here after it is declared
+        fetchLeadsWithFilters(filterData);
+      };
+      
+    
+    
+    
     
       useEffect(() => {
         fetchLeads();
         fetchDropdownData();
       }, []);
     
-      useEffect(() => {
-        if (leads.length > 0) {
-          $('#basic-datatables').DataTable({
-            paging: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            responsive: true
-          });
-        }
-      }, [leads]);
+    //    useEffect(() => {
+    //     if (leads.length > 0) {
+    //        $('#basic-datatables').DataTable({
+    //          paging: true,
+    //         searching: true,
+    //          ordering: true,
+    //          info: true,
+    //          responsive: true
+    //        });
+    //      }
+    //    }, [leads]);
+
+      
     
   return (
     <div className="wrapper">
@@ -209,14 +333,13 @@ const Report = () => {
             <div className="page-header">
               <h3 className="fw-bold mb-3">Lead Management</h3>
             </div>
+            <FilterForm onFilterApply={handleFilterSubmit} />
             <div className="row">
               <div className="col-md-12">
                 <div className="card">
                   <div className="card-header d-flex align-items-center">
                     <h4 className="card-title">Leads</h4>
-                    <button className="btn btn-primary ms-auto" onClick={handleAdd}>
-                      <i className="fas fa-plus-circle"></i>  Add Lead
-                    </button>
+                   
                   </div>
                   <div className="card-body">
                     <div className="table-responsive">

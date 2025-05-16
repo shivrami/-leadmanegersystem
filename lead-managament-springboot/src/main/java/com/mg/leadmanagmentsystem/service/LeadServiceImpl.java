@@ -4,7 +4,10 @@ import com.mg.dto.LeadRequestDTO;
 import com.mg.dto.LeadResponseDTO;
 import com.mg.leadmanagmentsystem.entity.*;
 import com.mg.leadmanagmentsystem.repository.*;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +18,13 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class LeadServiceImpl implements LeadService {
+	
+	private final ModelMapper modelMapper;
+
+    @Autowired
+    public LeadServiceImpl(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
 
     @Autowired
     private LeadRepository leadRepository;
@@ -204,4 +214,35 @@ public class LeadServiceImpl implements LeadService {
         Lead updatedLead = leadRepository.save(existing);
         return convertToDto(updatedLead);
     }
+    
+    
+    
+    
+    @Override
+    public List<LeadResponseDTO> getFilteredLeads(Integer leadStatusId, Integer counselorId, Integer leadSourceId, Integer courseId) {
+        Specification<Lead> spec = Specification.where(null);
+
+        if (leadStatusId != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("leadStatus").get("id"), leadStatusId));
+        }
+        if (counselorId != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("counselor").get("id"), counselorId));
+        }
+        if (leadSourceId != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("leadSource").get("id"), leadSourceId));
+        }
+        if (courseId != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.join("courses").get("id"), courseId));
+        }
+
+        List<Lead> leads = leadRepository.findAll(spec);
+
+        return leads.stream()
+                .map(this::convertToDto)  // Use the custom conversion logic
+                .collect(Collectors.toList());
+    }
+
+
+    
+    
 }

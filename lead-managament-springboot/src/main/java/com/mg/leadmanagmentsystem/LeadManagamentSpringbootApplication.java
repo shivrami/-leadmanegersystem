@@ -12,5 +12,7 @@ public class LeadManagamentSpringbootApplication {
 		SpringApplication.run(LeadManagamentSpringbootApplication.class, args);
 		System.out.println("end program...");
 	}
+	
+	
 
 }

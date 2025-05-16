@@ -226,7 +226,7 @@ const OpenLead = () => {
       const response = await fetch("http://localhost:8080/api/leads");
       if (!response.ok) throw new Error("Failed to fetch leads");
       const data = await response.json();
-      setLeads(data.filter(lead => lead.leadStatusName === 'Open'));
+      setLeads(data.filter(lead => lead.leadStatusName === 'New'));
     } catch (error) {
       console.error('Error fetching leads:', error);
     }
